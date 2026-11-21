@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="STUDY.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>STUDY. | Study Planner</title>
+<style>
+:root{--bg:#f4f4f2;--card:#fff;--ink:#151515;--muted:#777;--line:#e7e7e4;--soft:#ededeb;--accent:#171717;--ok:#3e7655}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:720px;margin:auto;padding:22px 17px 30px}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 22px}.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700}.brand{font-size:25px;font-weight:850;letter-spacing:-1.5px}.date{font-size:12px;color:var(--muted);margin-top:4px}.mark{width:42px;height:42px;background:#111;color:#fff;border-radius:14px;display:grid;place-items:center;font-weight:800}
+h1{font-size:27px;letter-spacing:-1px;margin:0 0 18px}h2{font-size:16px;margin:0 0 13px}.muted{color:var(--muted)}.small{font-size:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:17px;margin-bottom:13px;box-shadow:0 2px 10px #00000005}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.bigtime{font-size:38px;letter-spacing:-1.8px;font-weight:800;font-variant-numeric:tabular-nums}.progress{height:8px;border-radius:20px;background:var(--soft);overflow:hidden;margin:12px 0 8px}.progress span{display:block;height:100%;background:#171717;border-radius:20px;width:0}.btn{border:0;border-radius:12px;background:#111;color:#fff;padding:12px 15px;font-weight:700}.btn.secondary{background:#eee;color:#111}.btn.ghost{background:transparent;color:#111;border:1px solid var(--line)}.btn.full{width:100%}.btn:disabled{opacity:.4}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#f7f7f5;border-radius:13px;padding:12px}.stat strong{display:block;font-size:21px;margin-top:4px}.task{display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.check{width:22px;height:22px;border:1.5px solid #aaa;border-radius:50%;background:white;flex:none}.check.done{background:#171717;border-color:#171717;color:#fff}.taskname{font-weight:700;font-size:14px}.taskdesc{font-size:12px;color:var(--muted);margin-top:3px}.tasktime{font-size:11px;color:var(--muted);white-space:nowrap}.field{width:100%;border:1px solid var(--line);border-radius:11px;background:#fff;padding:12px;color:#111;outline:none}.field:focus{border-color:#777}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.formgrid .wide{grid-column:1/-1}.tabs{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(15px);border-top:1px solid var(--line);padding:9px 8px calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:5}.tab{border:0;background:none;color:#888;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:54px}.tab b{font-size:19px;font-weight:500}.tab.active{color:#111;font-weight:800}.screen{display:none}.screen.active{display:block}.timer{text-align:center;padding:24px 10px}.timer .bigtime{font-size:58px;margin:16px 0}.timerlabel{font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:800}.timerbuttons{display:flex;gap:9px;justify-content:center;margin-top:18px}.timerbuttons button{min-width:112px}.pill{display:inline-block;background:#f0f0ee;padding:6px 10px;border-radius:20px;font-size:11px;color:#555}.barrow{display:grid;grid-template-columns:65px 1fr 48px;gap:9px;align-items:center;margin:12px 0;font-size:12px}.bar{height:9px;background:#eee;border-radius:20px;overflow:hidden}.bar span{display:block;height:100%;background:#222}.empty{text-align:center;color:#888;padding:22px 8px;font-size:13px}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:22px 0 11px}.danger{color:#9c3f3f}.note{background:#f7f7f5;border-radius:12px;padding:12px;font-size:12px;color:#666;line-height:1.6}
+@media(min-width:600px){.wrap{padding-top:34px}.bigtime{font-size:44px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div><div class="eyebrow">YOUR PERSONAL STUDY SPACE</div><div class="brand">STUDY.</div><div class="date" id="todayLabel"></div></div><div class="mark">S.</div></header>
+
+<section id="home" class="screen active">
+<h1>今日も一歩ずつ。</h1>
+<div class="card">
+ <div class="eyebrow">TODAY'S STUDY TIME</div>
+ <div class="row" style="align-items:baseline;margin-top:5px"><div class="bigtime" id="todayTime">00:00</div><div class="small muted" id="goalLabel">目標 6時間</div></div>
+ <div class="progress"><span id="goalProgress"></span></div>
+ <div class="row small muted"><span id="goalPercent">0% 達成</span><span id="todaySessions">0 セッション</span></div>
+</div>
+<div class="stats">
+ <div class="stat"><span class="small muted">今週の学習時間</span><strong id="weekTime">0時間</strong></div>
+ <div class="stat"><span class="small muted">完了タスク</span><strong id="doneTasks">0件</strong></div>
+</div>
+<div class="sectionhead"><h2>今日のタスク</h2><button class="btn ghost" onclick="show('plan')">＋ 追加</button></div>
+<div class="card" id="homeTasks"></div>
+<div class="card"><div class="row"><div><div class="eyebrow">READY TO FOCUS?</div><h2 style="margin:5px 0 0">勉強を始めよう</h2></div><button class="btn" onclick="show('record')">タイマーへ →</button></div></div>
+</section>
+
+<section id="plan" class="screen">
+<h1>学習計画</h1>
+<div class="card">
+ <h2>タスクを追加</h2>
+ <form id="taskForm" class="formgrid">
+  <input class="field wide" id="taskTitle" placeholder="例：青チャート 例題10〜15" required maxlength="70">
+  <select class="field" id="taskSubject"></select>
+  <input class="field" id="taskMinutes" type="number" min="5" max="600" value="60" placeholder="予定分">
+  <input class="field wide" id="taskDate" type="date" required>
+  <button class="btn full wide" type="submit">タスクを追加</button>
+ </form>
+</div>
+<div class="sectionhead"><h2>登録したタスク</h2><span class="small muted" id="taskCount"></span></div>
+<div class="card" id="allTasks"></div>
+</section>
+
+<section id="record" class="screen">
+<h1>集中して取り組む。</h1>
+<div class="card">
+ <div class="row"><h2>学習タイマー</h2><span class="pill" id="timerMode">ストップウォッチ</span></div>
+ <div class="formgrid">
+  <select class="field" id="timerSubject"></select>
+  <select class="field" id="timerTask"><option value="">タスク（任意）</option></select>
+ </div>
+ <div class="timer">
+  <div class="timerlabel" id="timerLabel">FOCUS TIME</div>
+  <div class="bigtime" id="timerDisplay">00:00:00</div>
+  <div class="timerbuttons"><button class="btn" id="startBtn" onclick="startTimer()">開始</button><button class="btn secondary" onclick="pauseTimer()">一時停止</button><button class="btn ghost" onclick="finishTimer()">終了・保存</button></div>
+ </div>
+ <div class="note">タイマーを終了すると学習時間が記録されます。計測中は画面を開いたままにしておくのがおすすめです。</div>
+</div>
+<div class="card">
+ <h2>ポモドーロ設定</h2>
+ <div class="formgrid">
+  <label class="small muted">勉強（分）<input class="field" id="focusMin" type="number" min="1" max="180" value="25"></label>
+  <label class="small muted">休憩（分）<input class="field" id="breakMin" type="number" min="1" max="60" value="5"></label>
+ </div>
+ <div class="row" style="margin-top:12px"><span class="small muted">設定した時間をタイマーに適用</span><button class="btn secondary" onclick="applyPomodoro()">適用</button></div>
+</div>
+<div class="sectionhead"><h2>最近の学習記録</h2></div>
+<div class="card" id="recentLogs"></div>
+</section>
+
+<section id="analysis" class="screen">
+<h1>学習を振り返る。</h1>
+<div class="card"><div class="eyebrow">LAST 7 DAYS</div><h2 style="margin-top:6px">週間学習時間</h2><div id="weeklyBars"></div></div>
+<div class="card"><div class="eyebrow">SUBJECT BREAKDOWN</div><h2 style="margin-top:6px">科目別の学習時間（全期間）</h2><div id="subjectBars"></div></div>
+<div class="stats">
+ <div class="stat"><span class="small muted">累計学習時間</span><strong id="totalTime">0時間</strong></div>
+ <div class="stat"><span class="small muted">平均（直近7日）</span><strong id="averageTime">0分/日</strong></div>
+</div>
+</section>
+
+<section id="settings" class="screen">
+<h1>設定</h1>
+<div class="card">
+ <h2>1日の目標勉強時間</h2>
+ <div class="row"><input class="field" style="max-width:130px" id="goalHours" type="number" min="1" max="18" value="6"><span class="muted small">時間 / 日</span><button class="btn" onclick="saveGoal()">保存</button></div>
+</div>
+<div class="card">
+ <h2>科目</h2><div class="small muted" style="line-height:1.8">英語・数学・物理・化学・国語・地歴・公民</div>
+</div>
+<div class="card">
+ <h2>データ管理</h2>
+ <p class="small muted">学習記録とタスクはこの端末のブラウザ内に保存されます。</p>
+ <div class="row"><button class="btn secondary" onclick="exportData()">データを書き出す</button><button class="btn ghost danger" onclick="clearData()">全データ削除</button></div>
+ <p class="small muted" style="margin-bottom:0">機種変更やSafariの履歴・Webサイトデータ削除に備えて、定期的に書き出してください。</p>
+</div>
+<div class="note">STUDY. v1.0 · 難関国公立大学を目指す学習管理アプリ</div>
+</section>
+</div>
+
+<nav class="tabs">
+ <button class="tab active" data-screen="home" onclick="show('home')"><b>⌂</b>ホーム</button>
+ <button class="tab" data-screen="plan" onclick="show('plan')"><b>▦</b>計画</button>
+ <button class="tab" data-screen="record" onclick="show('record')"><b>◷</b>記録</button>
+ <button class="tab" data-screen="analysis" onclick="show('analysis')"><b>▥</b>分析</button>
+ <button class="tab" data-screen="settings" onclick="show('settings')"><b>⚙</b>設定</button>
+</nav>
+<script>
+const SUBJECTS=['英語','数学','物理','化学','国語','地歴・公民'];
+const KEY='study_app_v1';
+let data=load();
+let timer={running:false,start:null,elapsed:0,mode:'stopwatch',duration:0,remaining:0,interval:null};
+const $=id=>document.getElementById(id);
+function localDate(d=new Date()){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{tasks:[],logs:[],goal:6,pom:{focus:25,rest:5}}}catch(e){return {tasks:[],logs:[],goal:6,pom:{focus:25,rest:5}}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function fmt(sec){sec=Math.max(0,Math.floor(sec));let h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return [h,m,s].map(v=>String(v).padStart(2,'0')).join(':')}
+function shortTime(sec){let m=Math.floor(sec/60);return m>=60?`${Math.floor(m/60)}時間${m%60}分`:`${m}分`}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.screen===id));if(id==='record')renderLogs();if(id==='analysis')renderAnalysis()}
+function fillSubjects(){['taskSubject','timerSubject'].forEach(id=>$(id).innerHTML=SUBJECTS.map(s=>`<option>${s}</option>`).join(''))}
+function addTask(e){e.preventDefault();data.tasks.push({id:Date.now(),title:$('taskTitle').value.trim(),subject:$('taskSubject').value,minutes:Number($('taskMinutes').value)||60,date:$('taskDate').value,done:false});$('taskTitle').value='';save()}
+function taskHtml(t){return `<div class="task"><button class="check ${t.done?'done':''}" onclick="toggleTask(${t.id})">${t.done?'✓':''}</button><div style="flex:1;min-width:0"><div class="taskname" style="${t.done?'text-decoration:line-through;color:#999':''}">${esc(t.title)}</div><div class="taskdesc">${t.subject} · ${t.date}</div></div><span class="tasktime">${t.minutes}分</span><button class="btn ghost" style="padding:6px 9px" onclick="deleteTask(${t.id})">×</button></div>`}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toggleTask(id){let t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save()}
+function deleteTask(id){data.tasks=data.tasks.filter(x=>x.id!==id);save()}
+function renderTasks(){let today=localDate();let ts=data.tasks.filter(t=>t.date===today);$('homeTasks').innerHTML=ts.length?ts.map(taskHtml).join(''):'<div class="empty">今日のタスクはまだありません。計画から追加してみよう。</div>';$('allTasks').innerHTML=data.tasks.length?[...data.tasks].sort((a,b)=>a.date.localeCompare(b.date)).map(taskHtml).join(''):'<div class="empty">タスクがありません。</div>';$('taskCount').textContent=`${data.tasks.length}件`;$('doneTasks').textContent=data.tasks.filter(t=>t.done).length+'件';$('timerTask').innerHTML='<option value="">タスク（任意）</option>'+data.tasks.filter(t=>!t.done).map(t=>`<option value="${t.id}">${esc(t.title)}</option>`).join('')}
+function sumLogs(logs){return logs.reduce((a,l)=>a+l.seconds,0)}
+function renderHome(){let today=localDate(),logs=data.logs.filter(l=>l.date===today),sec=sumLogs(logs),goal=data.goal*3600,pct=Math.min(100,Math.round(sec/goal*100));$('todayTime').textContent=shortTime(sec);$('goalLabel').textContent=`目標 ${data.goal}時間`;$('goalProgress').style.width=pct+'%';$('goalPercent').textContent=pct+'% 達成';$('todaySessions').textContent=logs.length+' セッション';let d=new Date();d.setDate(d.getDate()-6);let week=data.logs.filter(l=>l.date>=localDate(d));$('weekTime').textContent=(sumLogs(week)/3600).toFixed(1)+'時間'}
+function renderLogs(){$('recentLogs').innerHTML=data.logs.length?[...data.logs].slice(-8).reverse().map(l=>`<div class="task"><div style="flex:1"><div class="taskname">${l.subject}</div><div class="taskdesc">${l.date} · ${esc(l.title||'自由学習')}</div></div><span class="tasktime">${shortTime(l.seconds)}</span></div>`).join(''):'<div class="empty">学習記録はまだありません。</div>'}
+function renderAnalysis(){let now=new Date(),days=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(now.getDate()-i);let date=localDate(d);days.push({date,label:['日','月','火','水','木','金','土'][d.getDay()],sec:sumLogs(data.logs.filter(l=>l.date===date))})}let max=Math.max(1,...days.map(x=>x.sec));$('weeklyBars').innerHTML=days.map(x=>`<div class="barrow"><span>${x.label}曜</span><div class="bar"><span style="width:${x.sec/max*100}%"></span></div><span style="text-align:right">${Math.round(x.sec/60)}分</span></div>`).join('');let vals=SUBJECTS.map(s=>({s,sec:sumLogs(data.logs.filter(l=>l.subject===s))})),mx=Math.max(1,...vals.map(x=>x.sec));$('subjectBars').innerHTML=vals.map(x=>`<div class="barrow"><span>${x.s}</span><div class="bar"><span style="width:${x.sec/mx*100}%"></span></div><span style="text-align:right">${Math.round(x.sec/60)}分</span></div>`).join('');$('totalTime').textContent=(sumLogs(data.logs)/3600).toFixed(1)+'時間';$('averageTime').textContent=Math.round(sumLogs(data.logs.filter(l=>l.date>=localDate(new Date(Date.now()-6*86400000))))/7/60)+'分/日'}
+function render(){renderHome();renderTasks();renderLogs();if($('analysis').classList.contains('active'))renderAnalysis();$('goalHours').value=data.goal}
+function startTimer(){if(timer.running)return;if(timer.mode==='pomodoro'&&timer.remaining<=0)timer.remaining=timer.duration;if(timer.mode==='pomodoro'&&timer.remaining<=0)return;timer.running=true;timer.start=Date.now();$('startBtn').textContent='計測中';timer.interval=setInterval(tick,250);tick()}
+function pauseTimer(){if(!timer.running)return;timer.elapsed+=Date.now()-timer.start;if(timer.mode==='pomodoro')timer.remaining=Math.max(0,timer.remaining-(Date.now()-timer.start)/1000);timer.running=false;clearInterval(timer.interval);$('startBtn').textContent='再開';tick()}
+function tick(){let elapsed=timer.elapsed+(timer.running?Date.now()-timer.start:0);if(timer.mode==='pomodoro'){let rem=timer.remaining-(timer.running?(Date.now()-timer.start)/1000:0);$('timerDisplay').textContent=fmt(Math.max(0,rem));if(rem<=0&&timer.running){pauseTimer();$('timerLabel').textContent='TIME IS UP';}}else $('timerDisplay').textContent=fmt(elapsed/1000)}
+function finishTimer(){let delta=timer.running?Date.now()-timer.start:0;if(timer.running){if(timer.mode==='pomodoro')timer.remaining=Math.max(0,timer.remaining-delta/1000);else timer.elapsed+=delta;timer.running=false;clearInterval(timer.interval)}let sec=timer.mode==='pomodoro'?Math.floor(timer.duration-timer.remaining):Math.floor(timer.elapsed/1000);if(sec>=5){let task=data.tasks.find(t=>String(t.id)===$('timerTask').value);data.logs.push({date:localDate(),subject:$('timerSubject').value,title:task?.title||'',seconds:sec});}timer.elapsed=0;timer.start=null;timer.remaining=timer.mode==='pomodoro'?timer.duration:0;$('startBtn').textContent='開始';$('timerLabel').textContent='FOCUS TIME';save();tick()}
+function applyPomodoro(){let f=Math.max(1,Math.min(180,Number($('focusMin').value)||25)),b=Math.max(1,Math.min(60,Number($('breakMin').value)||5));data.pom={focus:f,rest:b};timer.mode='pomodoro';timer.duration=f*60;timer.remaining=f*60;timer.elapsed=0;timer.running=false;clearInterval(timer.interval);$('timerMode').textContent=`${f}分集中`; $('timerLabel').textContent='POMODORO FOCUS';$('startBtn').textContent='開始';tick()}
+function saveGoal(){data.goal=Math.max(1,Math.min(18,Number($('goalHours').value)||6));save()}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='study-backup-'+localDate()+'.json';a.click();URL.revokeObjectURL(url)}
+function clearData(){if(confirm('タスクと学習記録をすべて削除します。この操作は元に戻せません。')){data={tasks:[],logs:[],goal:6,pom:{focus:25,rest:5}};save();}}
+$('taskForm').addEventListener('submit',addTask);
+fillSubjects();$('todayLabel').textContent=new Intl.DateTimeFormat('ja-JP',{dateStyle:'full'}).format(new Date());$('taskDate').value=localDate();$('goalHours').value=data.goal;$('focusMin').value=data.pom.focus;$('breakMin').value=data.pom.rest;render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
